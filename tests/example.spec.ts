@@ -83,33 +83,40 @@ describe('Positive test cases', () => {
 })
 
 describe('Negative test cases', () => {
-  [
+  const testCases: { 
+    testName: string, 
+    userName: string,
+    password: string,
+    expected: string 
+  }[] = [
     { 
-      test_name: 'Incorrect username', 
-      user_name: 'non_existing_user',
+      testName: 'Incorrect username', 
+      userName: 'non_existing_user',
       password: 'secret_sauce',
       expected: 'Epic sadface: Username and password do not match any user in this service' 
     },
     { 
-      test_name: 'Locked out user', 
-      user_name: 'locked_out_user',
+      testName: 'Locked out user', 
+      userName: 'locked_out_user',
       password: 'secret_sauce',
       expected: 'Epic sadface: Sorry, this user has been locked out.' 
     },
     { 
-      test_name: 'Incorrect password', 
-      user_name: 'standard_user',
+      testName: 'Incorrect password', 
+      userName: 'standard_user',
       password: 'incorrect_password',
       expected: 'Epic sadface: Username and password do not match any user in this service' 
     },
-  ].forEach(({ test_name, user_name, password, expected }) => {
-    test(test_name, async ({ page }) => {
+  ];
+  
+  testCases.forEach(({ testName, userName, password, expected }) => {
+    test(testName, async ({ page }) => {
       await page.goto('https://www.saucedemo.com/')
       const loginButton = page.getByRole('button', { name: 'Login'})
       await expect(loginButton).toBeVisible()
 
-      await page.fill('#user-name', user_name!)
-      await page.fill('#password', password!)
+      await page.fill('#user-name', userName)
+      await page.fill('#password', password)
       await loginButton.click()
       
       await expect(page.getByText(expected))
@@ -121,5 +128,5 @@ describe('Negative test cases', () => {
 test('iFrame test', async ({ page }) => {
   await page.goto('https://the-internet.herokuapp.com/iframe')
 
-  await expect(page.frameLocator('#mce_0_ifr').getByText('Your content goes here.')).toBeVisible
+  await expect(page.frameLocator('#mce_0_ifr').getByText('Your content goes here.')).toBeVisible()
 })
