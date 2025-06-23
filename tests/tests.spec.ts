@@ -1,22 +1,13 @@
-import { test, expect, Locator, FrameLocator } from '@playwright/test'
+import { test, expect, FrameLocator } from '@playwright/test'
 import { describe } from 'node:test'
+import { HomePage } from '../pages/HomePage'
 
 describe('Positive test cases', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/')
-    const loginButton = page.getByRole('button', { name: 'Login'})
-    await expect(loginButton).toBeVisible()
-
-    await page.fill('#user-name', 'standard_user')
-    await page.fill('#password', 'secret_sauce')
-    await loginButton.click()
-
-    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html')
-    await expect(page.locator('.app_logo')).toBeVisible()
-    await expect(page.getByText('Products')).toBeVisible()
-  })
-
   test('E2E', async ({ page }) => {
+    const homePage: HomePage = new HomePage(page)
+    homePage.goto()
+    homePage.logIn('standard_user', 'secret_sauce')
+
     await expect(page.getByRole('button', { name: 'Add to cart' })).toHaveCount(6)
 
     let itemNames: string[] = ['Sauce Labs Backpack', 'Sauce Labs Bike Light', 
