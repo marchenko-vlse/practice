@@ -1,5 +1,5 @@
-import { test, expect, Locator } from '@playwright/test';
-import { describe } from 'node:test';
+import { test, expect, Locator } from '@playwright/test'
+import { describe } from 'node:test'
 
 describe('Positive test cases', () => {
   test.beforeEach(async ({ page }) => {
@@ -23,12 +23,12 @@ describe('Positive test cases', () => {
                                'Sauce Labs Bolt T-Shirt', 'Sauce Labs Fleece Jacket', 
                                'Sauce Labs Onesie', 'Test.allTheThings() T-Shirt (Red)'
     ]
-    await page.locator('.product_sort_container').selectOption('az');
+    await page.locator('.product_sort_container').selectOption('az')
     await expect(page.getByRole('button', { name: 'Add to cart' })).toHaveCount(6)
     await expect(page.locator('.inventory_item_name')).toHaveText(itemNames)
 
     itemNames.reverse()
-    await page.locator('.product_sort_container').selectOption('za');
+    await page.locator('.product_sort_container').selectOption('za')
     await expect(page.getByRole('button', { name: 'Add to cart' })).toHaveCount(6)
     await expect(page.locator('.inventory_item_name')).toHaveText(itemNames)
 
@@ -39,7 +39,7 @@ describe('Positive test cases', () => {
       'Sauce Labs Bolt T-Shirt', 'Test.allTheThings() T-Shirt (Red)',
       'Sauce Labs Backpack', 'Sauce Labs Fleece Jacket'
     ]
-    await page.locator('.product_sort_container').selectOption('lohi');
+    await page.locator('.product_sort_container').selectOption('lohi')
     await expect(page.getByRole('button', { name: 'Add to cart' })).toHaveCount(6)
     await expect(page.locator('.inventory_item_name')).toHaveText(itemNames)
 
@@ -47,7 +47,7 @@ describe('Positive test cases', () => {
                  'Sauce Labs Bolt T-Shirt', 'Test.allTheThings() T-Shirt (Red)',
                  'Sauce Labs Bike Light', 'Sauce Labs Onesie'
     ]
-    await page.locator('.product_sort_container').selectOption('hilo');
+    await page.locator('.product_sort_container').selectOption('hilo')
     await expect(page.getByRole('button', { name: 'Add to cart' })).toHaveCount(6)
     await expect(page.locator('.inventory_item_name')).toHaveText(itemNames)
 
@@ -116,4 +116,10 @@ describe('Negative test cases', () => {
               .toBeVisible()
     })
   })
+})
+
+test('iFrame test', async ({ page }) => {
+  await page.goto('https://the-internet.herokuapp.com/iframe')
+
+  await expect(page.frameLocator('#mce_0_ifr').getByText('Your content goes here.')).toBeVisible
 })
