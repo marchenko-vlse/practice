@@ -83,42 +83,37 @@ describe('Positive test cases', () => {
 })
 
 describe('Negative test cases', () => {
-  test('Incorrect username', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/')
-    const loginButton = page.getByRole('button', { name: 'Login'})
-    await expect(loginButton).toBeVisible()
+  [
+    { 
+      test_name: 'Incorrect username', 
+      user_name: 'non_existing_user',
+      password: 'secret_sauce',
+      expected: 'Epic sadface: Username and password do not match any user in this service' 
+    },
+    { 
+      test_name: 'Locked out user', 
+      user_name: 'locked_out_user',
+      password: 'secret_sauce',
+      expected: 'Epic sadface: Sorry, this user has been locked out.' 
+    },
+    { 
+      test_name: 'Incorrect password', 
+      user_name: 'standard_user',
+      password: 'incorrect_password',
+      expected: 'Epic sadface: Username and password do not match any user in this service' 
+    },
+  ].forEach(({ test_name, user_name, password, expected }) => {
+    test(test_name, async ({ page }) => {
+      await page.goto('https://www.saucedemo.com/')
+      const loginButton = page.getByRole('button', { name: 'Login'})
+      await expect(loginButton).toBeVisible()
 
-    await page.fill('#user-name', 'non_existing_user')
-    await page.fill('#password', 'secret_sauce')
-    await loginButton.click()
-    
-    await expect(page.getByText('Epic sadface: Username and password do not match any user in this service'))
-            .toBeVisible()
-  })
-
-  test('Incorrect password', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/')
-    const loginButton = page.getByRole('button', { name: 'Login'})
-    await expect(loginButton).toBeVisible()
-
-    await page.fill('#user-name', 'standard_user')
-    await page.fill('#password', 'incorrect_password')
-    await loginButton.click()
-    
-    await expect(page.getByText('Epic sadface: Username and password do not match any user in this service'))
-            .toBeVisible()
-  })
-
-  test('Locked out user', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/')
-    const loginButton = page.getByRole('button', { name: 'Login'})
-    await expect(loginButton).toBeVisible()
-
-    await page.fill('#user-name', 'locked_out_user')
-    await page.fill('#password', 'secret_sauce')
-    await loginButton.click()
-    
-    await expect(page.getByText('Epic sadface: Sorry, this user has been locked out.'))
-            .toBeVisible()
+      await page.fill('#user-name', user_name!)
+      await page.fill('#password', password!)
+      await loginButton.click()
+      
+      await expect(page.getByText(expected))
+              .toBeVisible()
+    })
   })
 })
