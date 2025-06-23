@@ -1,4 +1,4 @@
-import { test, expect, Locator } from '@playwright/test'
+import { test, expect, Locator, FrameLocator } from '@playwright/test'
 import { describe } from 'node:test'
 
 describe('Positive test cases', () => {
@@ -128,5 +128,7 @@ describe('Negative test cases', () => {
 test('iFrame test', async ({ page }) => {
   await page.goto('https://the-internet.herokuapp.com/iframe')
 
-  await expect(page.frameLocator('#mce_0_ifr').getByText('Your content goes here.')).toBeVisible()
+  const frame: FrameLocator = page.frameLocator('#mce_0_ifr')
+
+  await expect(frame.getByText('Your content goes here.')).toBeVisible();
 })
